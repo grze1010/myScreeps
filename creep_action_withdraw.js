@@ -13,17 +13,23 @@ module.exports.run = function (creep) {
     }
     let target = vars.target;
 
-    let res = creep.harvest(target);
+    let res;
+    if (creep.memory.resourceName) {
+        res = creep.withdraw(target, creep.memory.resourceName);
+    } else {
+        for (let resourceName in target.store) {
+            res = creep.withdraw(target, resourceName);
+            break;
+        }
+    }
+
     if (res == OK) {
         return 1;
-    }
-    if (res == ERR_NOT_ENOUGH_RESOURCES) {
-        return -1;
     }
     if (res == ERR_NOT_IN_RANGE) {
         creep.memory.action = 'travel';
         return 0;
     }
 
-    return 0;
+    return -1;
 };
