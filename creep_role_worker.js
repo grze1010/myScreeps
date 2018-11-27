@@ -18,7 +18,7 @@ module.exports.doAction = function (creep) {
     }
 
     if (creep.memory.action == 'idle') {
-        //waiting for action (empty energy source etc)
+        //waiting for action (between actions / energy source is empty etc.)
         if (creep.memory.idleCounter === undefined) {
             creep.memory.idleCounter = 0;
         } else if (creep.memory.idleCounter > 2) {

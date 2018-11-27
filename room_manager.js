@@ -10,9 +10,13 @@ var creep_manager = require('creep_manager');
  */
 module.exports.run = function(room, roomCreeps, roomTowers) {
     //creeps actions
+    let creepsNextAction = new Array();
     for (let i in roomCreeps) {
         let creep = roomCreeps[i];
-        creep_manager.doAction(creep);
+        let res = creep_manager.doAction(creep);
+        if (res == 0) {
+            creepsNextAction.push(creep);
+        }
     }
 
     //towers actions
@@ -22,6 +26,15 @@ module.exports.run = function(room, roomCreeps, roomTowers) {
     }
 
     //TODO AFTER CONTROLLER LEVEL 5: structure actions
+    //
+    
+    //try to run next action if last action failed (was not in range etc.)
+    if (creepsNextAction.length > 0) {
+        for (let i in creepsNextAction) {
+            let creep = creepsNextAction[i];
+            creep_manager.doAction(creep);
+        }
+    }
 };
 
 module.exports.spawnCreeps = function(room) {

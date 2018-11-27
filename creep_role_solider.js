@@ -1,6 +1,6 @@
 
 var creep_action_attack = require('creep_action_attack');
-var creep_action_scout = require('creep_action_scout'); //todo: flag rooms if not flagged
+var creep_action_scout = require('creep_action_scout');
 var creep_action_travel = require('creep_action_travel');
 
 /**
