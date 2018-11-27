@@ -13,13 +13,13 @@ module.exports.run = function (room) {
     });
     var droppedResources = room.find(FIND_DROPPED_RESOURCES)[0];
     if(!droppedResources) {
-        droppedResources = room.find(FIND_TOMBSTONES, { 
+        droppedResources = room.find(FIND_TOMBSTONES, {
             filter : (t) => {
                 for(var r in t.store) {
                     if(t.store[r]) {
                         return true;
                     }
-                } 
+                }
                 return false;
             }
         })[0];
@@ -31,14 +31,14 @@ module.exports.run = function (room) {
         room.memory.droppedResourceId = undefined;
         var collectors = _.filter(roomCreeps, (c) => c.memory.collectingDropped);
         for(var i in collectors) {
-            collectors[i].memory.collectingDropped = undefined; 
+            collectors[i].memory.collectingDropped = undefined;
         }
     }
-    
+
     for(var sourceId in room.memory.sourcesByIds) {
         console.log('sourceId: '+sourceId+', number of creeps: '+_.filter(Game.creeps, (creep) => creep.memory.sourceId == sourceId).length);
     }
-    
+
     module.exports.spawnCreeps(room, roomSpawns, roomCreeps, roomExtensions);
     module.exports.creepActions(room, roomSpawns, roomCreeps);
     module.exports.manageRoles(room, roomCreeps);
@@ -46,27 +46,27 @@ module.exports.run = function (room) {
 
 module.exports.spawnCreeps = function (room, roomSpawns, roomCreeps, roomExtensions) {
     console.log('----- spawn creeps start');
-    
+
     var attackers = _.filter(roomCreeps, (creep) => creep.memory.role == 'attacker');
     var maxAttackers = 1;
-    
+
     roomSpawns.forEach( function (spawn) {
         var availableEnergy = spawn.energy;
         roomExtensions.forEach( function (extension) {
             availableEnergy += extension.energy;
         });
-        if (availableEnergy => 1300) { 
+        if (availableEnergy => 1300) {
             if (!room.controller.safeMode && attackers.length < maxAttackers) {
                 var newName = 'Attacker' + Game.time;
-                spawn.spawnCreep([TOUGH,TOUGH,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,ATTACK,ATTACK,ATTACK,HEAL], 
+                spawn.spawnCreep([TOUGH,TOUGH,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,ATTACK,ATTACK,ATTACK,HEAL],
                                 newName, {memory: {role: 'attacker'}});
             }
             if (room.memory.maxCreeps > (roomCreeps.length-attackers.length)) {
                 console.log('wanna spawn new harvesting creep');
                 var newName = 'Creep' + Game.time;
                 spawn.spawnCreep([WORK,WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,
-                                MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE], 
-                                newName, {memory: {role: 'harvester'}}); 
+                                MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE],
+                                newName, {memory: {role: 'harvester'}});
             }
         }
     });
@@ -85,22 +85,22 @@ module.exports.manageRoles = function (room, roomCreeps) {
     console.log('repairers.length: '+repairers.length);
     console.log('upgraders.length: '+upgraders.length);
     console.log('attackers.length: '+attackers.length);
-    
+
     var numberOfActiveRoles = 0;
     if(harvesters.length > 0) numberOfActiveRoles += 1;
     if(builders.length > 0) numberOfActiveRoles += 1;
     if(repairers.length > 0) numberOfActiveRoles += 1;
     if(upgraders.length > 0) numberOfActiveRoles += 1;
-    
+
     var minWorkers = Math.floor((roomCreeps.length - attackers.length)/numberOfActiveRoles);
     console.log('minWorkers: '+minWorkers);
     var maxWorkers = room.memory.maxCreeps;
-    
+
     var needHarvesters = false;
     var needBuilders = false;
     var needRepairers = false;
     var needUpgraders = upgraders.length < minWorkers;
-    
+
     if (roleHarvester.findClosestTarget(roomCreeps[0])) {
         needHarvesters = true;
     }
@@ -110,12 +110,12 @@ module.exports.manageRoles = function (room, roomCreeps) {
         needBuilders = true;
     }
     // console.log('needBuilders: '+needBuilders);
-    
+
     // if (roleRepairer.findClosestTarget(roomCreeps[0])) {
     //     needRepairers = true;
     // } //todo
     // console.log('needRepairers: '+needRepairers);
-    
+
     var includeBuilders = builders.length > 0 && (!needBuilders || (needBuilders && builders.length > minWorkers));
     // console.log('includeBuilders: '+includeBuilders);
     var includeRepairers = repairers.length > 0 && (!needRepairers || (needRepairers && repairers.length > minWorkers));
@@ -124,11 +124,11 @@ module.exports.manageRoles = function (room, roomCreeps) {
     // console.log('includeHarvesters: '+includeHarvesters);
     var includeUpgraders = upgraders.length > minWorkers;
     // console.log('includeUpgraders: '+includeUpgraders);
-    
-    if(needHarvesters && 
-        (harvesters.length < minWorkers || 
-            ((!needRepairers || repairers.length >= minWorkers) 
-            && (!needBuilders || builders.length >= minWorkers) 
+
+    if(needHarvesters &&
+        (harvesters.length < minWorkers ||
+            ((!needRepairers || repairers.length >= minWorkers)
+            && (!needBuilders || builders.length >= minWorkers)
             && (!needUpgraders || upgraders.length >= minWorkers)))
     ) {
         if(includeBuilders) {
@@ -138,10 +138,10 @@ module.exports.manageRoles = function (room, roomCreeps) {
         } else if(includeUpgraders) {
             managerCreep.changeCreepRole(module.exports.getFirstNotInAction(upgraders), 'harvester');
         }
-    } else if(needBuilders && 
-        (builders.length < minWorkers || 
-            ((!needRepairers || repairers.length >= minWorkers) 
-            && (!needHarvesters || harvesters.length >= minWorkers) 
+    } else if(needBuilders &&
+        (builders.length < minWorkers ||
+            ((!needRepairers || repairers.length >= minWorkers)
+            && (!needHarvesters || harvesters.length >= minWorkers)
             && (!needUpgraders || upgraders.length >= minWorkers)))
     ) {
         if(includeRepairers) {
@@ -150,11 +150,11 @@ module.exports.manageRoles = function (room, roomCreeps) {
             managerCreep.changeCreepRole(module.exports.getFirstNotInAction(upgraders), 'builder');
         } else if(includeHarvesters) {
             managerCreep.changeCreepRole(module.exports.getFirstNotInAction(harvesters), 'builder');
-        } 
-    } else if(needRepairers && 
-        (repairers.length < minWorkers || 
-            ((!needHarvesters || harvesters.length >= minWorkers) 
-            && (!needBuilders || builders.length >= minWorkers) 
+        }
+    } else if(needRepairers &&
+        (repairers.length < minWorkers ||
+            ((!needHarvesters || harvesters.length >= minWorkers)
+            && (!needBuilders || builders.length >= minWorkers)
             && (!needUpgraders || upgraders.length >= minWorkers)))
     ) {
         if(includeBuilders) {
@@ -163,7 +163,7 @@ module.exports.manageRoles = function (room, roomCreeps) {
             managerCreep.changeCreepRole(module.exports.getFirstNotInAction(upgraders), 'repairer');
         } else if(includeHarvesters) {
             managerCreep.changeCreepRole(module.exports.getFirstNotInAction(harvesters), 'repairer');
-        } 
+        }
     } else {
         if(includeBuilders) {
             managerCreep.changeCreepRole(module.exports.getFirstNotInAction(builders), 'upgrader');
@@ -172,8 +172,8 @@ module.exports.manageRoles = function (room, roomCreeps) {
         } else if(includeHarvesters) {
             managerCreep.changeCreepRole(module.exports.getFirstNotInAction(harvesters), 'upgrader');
         }
-    } 
-    
+    }
+
     console.log('----- manage roles end');
 };
 
@@ -182,7 +182,7 @@ module.exports.creepActions = function (room, roomSpawns, roomCreeps) {
 
     roomCreeps.forEach( function (creep) {
         var inAction = false;
-        
+
         if(!inAction) {
             managerCreep.run(creep);
         }
@@ -200,5 +200,3 @@ module.exports.getFirstNotInAction = function (creeps) {
     }
     return undefined;
 }
-
-

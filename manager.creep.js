@@ -4,7 +4,7 @@ var roleBuilder = require('role.builder');
 var roleRepairer = require('role.repairer');
 var roleCollector = require('role.collector');
 var roleAttacker = require('role.attacker');
-var sourceHarvest = require('source.harvest');
+// var sourceHarvest = require('source.harvester');
 var managerResources = require('manager.resources');
 
 module.exports.run = function (creep) {

@@ -6,20 +6,20 @@ module.exports.doAction = function(creep) {
     if (creep.memory.action === undefined) {
         creep.memory.action = 'idle';
     }
-    
+
     let res;
     if (creep.memory.role == 'worker') {
         res = creep_role_worker.doAction(creep);
     } else if (creep.memory.role == 'solider') {
         res = creep_role_solider.doAction(creep);
     }
-    
+
     //if can't perform - reset creep memory
     if (res == -1) {
         module.exports.resetCreepMemory(creep);
         return 0;
     }
-    
+
     return res;
 };
 
