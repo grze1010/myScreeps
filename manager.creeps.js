@@ -8,7 +8,7 @@ module.exports.run = function (room) {
     var roomSpawns = room.find(FIND_MY_SPAWNS);
     var roomExtensions = room.find(FIND_MY_STRUCTURES, {
         filter: (structure) => {
-                return structure.structureType == 'extension';
+                return structure.structureType === 'extension';
         }
     });
     var droppedResources = room.find(FIND_DROPPED_RESOURCES)[0];
@@ -36,7 +36,7 @@ module.exports.run = function (room) {
     }
 
     for(var sourceId in room.memory.sourcesByIds) {
-        console.log('sourceId: '+sourceId+', number of creeps: '+_.filter(Game.creeps, (creep) => creep.memory.sourceId == sourceId).length);
+        console.log('sourceId: '+sourceId+', number of creeps: '+_.filter(Game.creeps, (creep) => creep.memory.sourceId === sourceId).length);
     }
 
     module.exports.spawnCreeps(room, roomSpawns, roomCreeps, roomExtensions);
@@ -47,7 +47,7 @@ module.exports.run = function (room) {
 module.exports.spawnCreeps = function (room, roomSpawns, roomCreeps, roomExtensions) {
     console.log('----- spawn creeps start');
 
-    var attackers = _.filter(roomCreeps, (creep) => creep.memory.role == 'attacker');
+    var attackers = _.filter(roomCreeps, (creep) => creep.memory.role === 'attacker');
     var maxAttackers = 1;
 
     roomSpawns.forEach( function (spawn) {
@@ -75,11 +75,11 @@ module.exports.spawnCreeps = function (room, roomSpawns, roomCreeps, roomExtensi
 
 module.exports.manageRoles = function (room, roomCreeps) {
     console.log('----- manage roles start');
-    var harvesters = _.filter(roomCreeps, (creep) => creep.memory.role == 'harvester');
-    var builders = _.filter(roomCreeps, (creep) => creep.memory.role == 'builder');
-    var repairers = _.filter(roomCreeps, (creep) => creep.memory.role == 'repairer');
-    var upgraders = _.filter(roomCreeps, (creep) => creep.memory.role == 'upgrader');
-    var attackers = _.filter(roomCreeps, (creep) => creep.memory.role == 'attacker');
+    var harvesters = _.filter(roomCreeps, (creep) => creep.memory.role === 'harvester');
+    var builders = _.filter(roomCreeps, (creep) => creep.memory.role === 'builder');
+    var repairers = _.filter(roomCreeps, (creep) => creep.memory.role === 'repairer');
+    var upgraders = _.filter(roomCreeps, (creep) => creep.memory.role === 'upgrader');
+    var attackers = _.filter(roomCreeps, (creep) => creep.memory.role === 'attacker');
     console.log('harvesters.length: '+harvesters.length);
     console.log('builders.length: '+builders.length);
     console.log('repairers.length: '+repairers.length);

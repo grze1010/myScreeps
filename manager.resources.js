@@ -4,18 +4,18 @@ module.exports.run = function(creep) {
     
     if(creep.room.memory.droppedResourceId) {
         res = module.exports.collectDroppedResources(creep);
-        if(res == 1) {
+        if(res === 1) {
             return res;
         }
     }
 
     res = module.exports.transportResourcesOtherThenEnergy(creep);
-    if(res == 1) {
+    if(res === 1) {
         return res;
     }
     
     res = module.exports.harvestSource(creep);
-    if(res == -1) {
+    if(res === -1) {
         return module.exports.getResourcesFromContainerAssignedToThisSource(creep);
     }
     
@@ -34,7 +34,7 @@ module.exports.harvestSource = function(creep) {
     }
     
     if(target && target.energy > 0) {
-        if(creep.harvest(target) == ERR_NOT_IN_RANGE) {
+        if(creep.harvest(target) === ERR_NOT_IN_RANGE) {
             creep.moveTo(target, {visualizePathStyle: {stroke: '#FFFFFF'}});
         }
         return 1;
@@ -60,12 +60,12 @@ module.exports.findSource = function(creep) {
         for(var sourceId in room.memory.sourcesByIds) {
             var source = Game.getObjectById(sourceId);
 
-            if(source.energy == 0) {
+            if(source.energy === 0) {
                 continue;
             }
             
             var maxWorkers = room.memory.sourcesByIds[sourceId].maxWorkers;
-            var currentNrOfWorkers = _.filter(Game.creeps, (c) => c.memory.sourceId == sourceId).length;
+            var currentNrOfWorkers = _.filter(Game.creeps, (c) => c.memory.sourceId === sourceId).length;
             if (currentNrOfWorkers < maxWorkers) {
                 creep.memory.sourceId = sourceId;
                 return 1;
@@ -80,14 +80,14 @@ module.exports.getResourcesFromContainerAssignedToThisSource = function(creep) {
     var source = Game.getObjectById(creep.memory.sourceId);
     var containers = source.pos.findInRange(FIND_STRUCTURES, 1, { 
         filter: (c) => { 
-            return c.structureType == STRUCTURE_CONTAINER && c.store.energy > 0; 
+            return c.structureType === STRUCTURE_CONTAINER && c.store.energy > 0; 
         } 
     });
     
-    var isTargetOneOfContainers = creep.memory.role == 'harvester' 
+    var isTargetOneOfContainers = creep.memory.role === 'harvester' 
             && creep.memory.targetId 
             && Game.getObjectById(creep.memory.targetId) 
-            && Game.getObjectById(creep.memory.targetId).structureType == STRUCTURE_CONTAINER;
+            && Game.getObjectById(creep.memory.targetId).structureType === STRUCTURE_CONTAINER;
     if(isTargetOneOfContainers) {
         console.log('empty energy source, energy left only in containers');
         creep.memory.targetId = undefined;
@@ -95,7 +95,7 @@ module.exports.getResourcesFromContainerAssignedToThisSource = function(creep) {
 
     for (var i in containers) {
         var container = containers[i];
-        if(creep.withdraw(container, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+        if(creep.withdraw(container, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
             creep.moveTo(container, {visualizePathStyle: {stroke: '#FFFFFF'}});
         }
         return 1;
@@ -109,7 +109,7 @@ module.exports.getResourcesFromContainerAssignedToThisSource = function(creep) {
 module.exports.transportResourcesOtherThenEnergy = function(creep) {
     var hasOtherResources = false;
     for(var resourceName in creep.carry) {
-        if(resourceName == RESOURCE_ENERGY) {
+        if(resourceName === RESOURCE_ENERGY) {
             continue;
         }
         if(resourceName) {
@@ -123,9 +123,9 @@ module.exports.transportResourcesOtherThenEnergy = function(creep) {
         if(creep.memory.targetId) {
             target = Game.getObjectById(creep.memory.targetId);
             
-            if(!target || target.structureType != STRUCTURE_STORAGE) {
+            if(!target || target.structureType !== STRUCTURE_STORAGE) {
                 target = creep.room.find(FIND_STRUCTURES, {
-                    filter : (s) => s.structureType == STRUCTURE_STORAGE
+                    filter : (s) => s.structureType === STRUCTURE_STORAGE
                 })[0];
                 
                 if(target) {
@@ -135,7 +135,7 @@ module.exports.transportResourcesOtherThenEnergy = function(creep) {
             
             if(target) {
                 for(var resourceName in creep.carry) {
-                    if(creep.transfer(target, resourceName) == ERR_NOT_IN_RANGE) {
+                    if(creep.transfer(target, resourceName) === ERR_NOT_IN_RANGE) {
                         creep.moveTo(target, {visualizePathStyle: {stroke: '#FFFFFF'}});
                     }
                 }
@@ -145,7 +145,7 @@ module.exports.transportResourcesOtherThenEnergy = function(creep) {
         return -1;
     }
     
-    // if(creep.memory.targetId && Game.getObjectById(creep.memory.targetId).structureType == STRUCTURE_STORAGE) {
+    // if(creep.memory.targetId && Game.getObjectById(creep.memory.targetId).structureType === STRUCTURE_STORAGE) {
     creep.memory.targetId = undefined;
     // }
     
@@ -154,15 +154,15 @@ module.exports.transportResourcesOtherThenEnergy = function(creep) {
 
 
 module.exports.collectDroppedResources = function (creep) {
-    var collectors = _.filter(Game.creeps, (c) => c.memory.roomName == creep.room.roomName && c.memory.collectingDropped);
+    var collectors = _.filter(Game.creeps, (c) => c.memory.roomName === creep.room.roomName && c.memory.collectingDropped);
     if(collectors.length > 0) {
         return 0;
     }
 
     var target = Game.getObjectById(creep.room.memory.droppedResourceId);
     if(target) {
-        if(target.type == 'resource') { //single resource
-            if(creep.pickup(target) == ERR_NOT_IN_RANGE) {
+        if(target.type === 'resource') { //single resource
+            if(creep.pickup(target) === ERR_NOT_IN_RANGE) {
                 creep.moveTo(target, {visualizePathStyle: {stroke: '#FFFFFF'}});
                 creep.memory.collectingDropped = true;
             }
@@ -171,7 +171,7 @@ module.exports.collectDroppedResources = function (creep) {
         
         if(target.store) { //tombstone
             for(var resourceName in target.store) {
-                if(creep.withdraw(target, resourceName) == ERR_NOT_IN_RANGE) {
+                if(creep.withdraw(target, resourceName) === ERR_NOT_IN_RANGE) {
                     creep.moveTo(target, {visualizePathStyle: {stroke: '#FFFFFF'}});
                     creep.memory.collectingDropped = true;
                     break;

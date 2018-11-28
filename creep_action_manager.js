@@ -25,7 +25,7 @@ module.exports.startAction = function (creep, checkTarget, checkCreepCarryCapaci
 	    for (let resourceName in creep.carry) {
 	        creepCarry += creep.carry[resourceName];
 	    }
-	    if (creepCarry == creep.carryCapacity) {
+	    if (creepCarry === creep.carryCapacity) {
 	        return -1;
 	    }
 		result.creepCarry = creepCarry;
@@ -43,7 +43,7 @@ module.exports.startAction = function (creep, checkTarget, checkCreepCarryCapaci
 		    for (let resourceName in creep.carry) {
 		        creepCarry += creep.carry[resourceName];
 		    }
-		    if (creepCarry == 0) {
+		    if (creepCarry === 0) {
 		        return -1;
 		    }
 			result.creepCarry = creepCarry;

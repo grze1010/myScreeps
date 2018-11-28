@@ -3,7 +3,7 @@ module.exports.run = function (creep) {
 	if(creep.memory.targetId) {
         var target = Game.getObjectById(creep.memory.targetId);
         if(target && target.progressTotal) {
-            if(creep.build(target) == ERR_NOT_IN_RANGE) {
+            if(creep.build(target) === ERR_NOT_IN_RANGE) {
                 creep.moveTo(target, {visualizePathStyle: {stroke: '#FFFFFF'}});
             }
             return 1;

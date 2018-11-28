@@ -12,7 +12,7 @@ module.exports.manageMemory = function (room) {
         	    var sourcePos = sources[sourceName].pos;
         	    room.lookForAtArea(LOOK_TERRAIN, sourcePos.y-1, sourcePos.x-1, sourcePos.y+1, sourcePos.x+1, true).forEach(
         	        function(area) {
-        	            if(area.terrain == 'plain' || area.terrain == 'swamp' || area.terrain == 'road') {
+        	            if(area.terrain === 'plain' || area.terrain === 'swamp' || area.terrain === 'road') {
         	                maxCreepsForEnergyNode += 1;
         	            }
                     }

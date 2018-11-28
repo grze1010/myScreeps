@@ -1,11 +1,11 @@
 var roomManager = require('room.manager');
 
 module.exports.run = function (room) {
-    var towers = room.find(FIND_MY_STRUCTURES, {filter : structure => { return structure.structureType == STRUCTURE_TOWER }});
+    var towers = room.find(FIND_MY_STRUCTURES, {filter : structure => { return structure.structureType === STRUCTURE_TOWER }});
     
     towers.forEach(function (tower) {
         var res = module.exports.engageEnemy(tower);
-        if (res == 0) {
+        if (res === 0) {
             module.exports.repairDamagedStructures(tower);
         }
     });

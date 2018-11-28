@@ -7,7 +7,7 @@ var extensionCreator = {
             for (var i in takenFields) {
                 var takenField = takenFields[i];
                 console.log('takenField: '+JSON.stringify(takenField));
-                if (room.createConstructionSite(takenField.x+1, takenField.y+1, STRUCTURE_EXTENSION) == -14) {
+                if (room.createConstructionSite(takenField.x+1, takenField.y+1, STRUCTURE_EXTENSION) === -14) {
                     var newTakenField = takenField;
                     newTakenField.x += 1;
                     newTakenField.y += 1;
@@ -17,7 +17,7 @@ var extensionCreator = {
                     break;
                 }
                     
-                if (room.createConstructionSite(takenField.x-1, takenField.y+1, STRUCTURE_EXTENSION) == -14) {
+                if (room.createConstructionSite(takenField.x-1, takenField.y+1, STRUCTURE_EXTENSION) === -14) {
                     var newTakenField = takenField;
                     newTakenField.x -= 1;
                     newTakenField.y += 1;
@@ -27,7 +27,7 @@ var extensionCreator = {
                     break;
                 }
                     
-                if (room.createConstructionSite(takenField.x-1, takenField.y-1, STRUCTURE_EXTENSION) == -14) {
+                if (room.createConstructionSite(takenField.x-1, takenField.y-1, STRUCTURE_EXTENSION) === -14) {
                     var newTakenField = takenField;
                     newTakenField.x -= 1;
                     newTakenField.y -= 1;
@@ -37,7 +37,7 @@ var extensionCreator = {
                     break;
                 }
                     
-                if (room.createConstructionSite(takenField.x+1, takenField.y-1, STRUCTURE_EXTENSION) == -14) {
+                if (room.createConstructionSite(takenField.x+1, takenField.y-1, STRUCTURE_EXTENSION) === -14) {
                     var newTakenField = takenField;
                     newTakenField.x += 1;
                     newTakenField.y -= 1;

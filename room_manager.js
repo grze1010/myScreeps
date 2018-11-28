@@ -65,6 +65,13 @@ var updateMemory = function(room) {
     //update neededUpgraders/neededHarvesters/neededBuilders/neededCollectors etc
 };
 
+/**
+ * @param {Room} room [description]
+ * @param {Source[]} roomSources [description]
+ * @param {Extension[]} roomExtensions [description]
+ * @param {Storage} roomStorage [description]
+ * @return {undefined} [description]
+ */
 var initiateMemory = function(room, roomSources, roomExtensions, roomStorage) {
     // middlePoint:
     let midPoint
@@ -80,16 +87,17 @@ var initiateMemory = function(room, roomSources, roomExtensions, roomStorage) {
         }
         let firstPoint = roomSourcesList[0].pos;
         let secondPoint = roomSourcesList[1].pos;
-        
+
         midPoint = {
-            x: Math.floor((firstPoint.x + secondPoint.x) / 2), 
-            y: Math.floor((firstPoint.y + secondPoint.y) / 2), 
+            x: Math.floor((firstPoint.x + secondPoint.x) / 2),
+            y: Math.floor((firstPoint.y + secondPoint.y) / 2),
             roomName: room.roomName
         };
         roomSourcesList.splice(0, 2, {pos: midPoint});
     }
-    
+
     //TODO: MIDDLEPOINT PLACEMENT - SHOULDN'T BE NEXT TO SOURCE
+    //TODO: rewrite with Game.map.getRoomTerrain()
     //middlePoint = find pos close to midPoint that is in the middle of empty(terrain) 5x5 block
     // [s][ ][t][ ][S] - S - storage
     // [ ][ ][ ][ ][ ] - s - spawn
@@ -108,7 +116,7 @@ var initiateMemory = function(room, roomSources, roomExtensions, roomStorage) {
     if (found) {
         room.memory.middlePoint = midPoint;
     }
-                
+
     let k = 0;
     while (room.memory.middlePoint === undefined) {
         let area = room.lookForAtArea(LOOK_TERRAIN, midPoint.y-k, midPoint.x-k, midPoint.y+k, midPoint.x+k, true);
@@ -130,21 +138,21 @@ var initiateMemory = function(room, roomSources, roomExtensions, roomStorage) {
         };
         k += 1;
     }
-    
-    
+
+
     // workerWORKbodyParts:
     if (currentWorkers > 0) {
         room.memory.workerWORKbodyParts = Math.floor(room.energyCapacityAvailable / 250);
     } else { //first worker
         room.memory.workerWORKbodyParts = 1;
     }
-    
+
     // sourcesByIds: (maxCreepsForEnergyNode, emptyTiles, containerId, linkId)
     room.memory.sourcesByIds = {};
     for (let i in roomSources) {
         room.memory.sourcesByIds[sources[i].id] = {};
 	    let sourcePos = roomSources[i].pos;
-	    
+
 	    //maxCreepsForEnergyNode, emptyTiles
 	    let maxCreepsForEnergyNode = 0;
 	    room.lookForAtArea(LOOK_TERRAIN, sourcePos.y-1, sourcePos.x-1, sourcePos.y+1, sourcePos.x+1, true).forEach(
@@ -160,7 +168,7 @@ var initiateMemory = function(room, roomSources, roomExtensions, roomStorage) {
             }
         );
         room.memory.sourcesByIds[roomSources[i].id].maxWorkers = maxCreepsForEnergyNode;
-        
+
         //containerId, linkId
 	    room.lookForAtArea(LOOK_STRUCTURES, sourcePos.y-1, sourcePos.x-1, sourcePos.y+1, sourcePos.x+1, true).forEach(
 	        function(x) {
@@ -171,28 +179,28 @@ var initiateMemory = function(room, roomSources, roomExtensions, roomStorage) {
                 }
             }
         );
-        
+
         //generate paths between middlePoint and empty tiles around sources
         for (let j in room.memory.sourcesByIds[roomSources[i].id].emptyTiles) {
             let emptyTilePos = room.memory.sourcesByIds[roomSources[i].id].emptyTiles[i];
             module.exports.generatePathAndAddToMemory(room, emptyTilePos, room.memory.middlePoint);
         }
     }
-    
-    
-    
+
+
+
     // maxSourceWorkers:
     let howManyTimesCreepNeedsToTravelToSource = SOURCE_ENERGY_CAPACITY / (workerWORKbodyParts*CARRY_CAPACITY);
     let path = module.exports.findPathInMemory(room, roomSources[0].pos, room.memory.middlePoint);
     let howMuchTimeItTakesToTravelToSource = path.length * 2 + 25 + 5;
     room.memory.maxSourceWorkers = Math.ceil(howManyTimesCreepNeedsToTravelToSource * howMuchTimeItTakesToTravelToSource / 300);
-    
+
     for (let i in room.memory.sourcesByIds) {
         if (room.memory.maxSourceWorkers < room.memory.sourcesByIds[i].maxWorkers) {
             room.memory.sourcesByIds[i].maxWorkers = room.memory.maxSourceWorkers;
         }
     }
-    
+
     // controllerLinkId:
     let controllerPos = room.controller.pos;
     room.lookForAtArea(LOOK_STRUCTURES, controllerPos.y-1, controllerPos.x-1, controllerPos.y+1, controllerPos.x+1, true).forEach(
@@ -206,7 +214,7 @@ var initiateMemory = function(room, roomSources, roomExtensions, roomStorage) {
     // roomStorage: (Id, linkId)
     room.memory.roomStorage = {};
     room.memory.roomStorage.Id = roomStorage.id;
-    
+
     let roomStoragePos = roomStorage.pos;
     room.lookForAtArea(LOOK_STRUCTURES, roomStoragePos.y-2, roomStoragePos.x-2, roomStoragePos.y+2, roomStoragePos.x+2, true).forEach(
         function(x) {
@@ -241,9 +249,3 @@ module.exports.findPathInMemory = function(room, fromPos, toPos) {
 module.exports.generatePathAndAddToMemory = function(room, fromPos, toPos) {
     //todo (generate both ways)
 }
-
-
-
-
-
-

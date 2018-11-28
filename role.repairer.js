@@ -4,7 +4,7 @@ module.exports.run = function (creep) {
         var target = Game.getObjectById(creep.memory.targetId);
         if(target && ((target.hitsMax <= 100000 && target.hits < target.hitsMax)
                 || (target.hitsMax > 100000 && target.hits < 100000))) {
-            if(creep.repair(target) == ERR_NOT_IN_RANGE) {
+            if(creep.repair(target) === ERR_NOT_IN_RANGE) {
                 creep.moveTo(target, {visualizePathStyle: {stroke: '#FFFFFF'}});
             }
             return 1;

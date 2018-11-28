@@ -8,14 +8,14 @@ module.exports.doAction = function(creep) {
     }
 
     let res;
-    if (creep.memory.role == 'worker') {
+    if (creep.memory.role === 'worker') {
         res = creep_role_worker.doAction(creep);
-    } else if (creep.memory.role == 'solider') {
+    } else if (creep.memory.role === 'solider') {
         res = creep_role_solider.doAction(creep);
     }
 
     //if can't perform - reset creep memory
-    if (res == -1) {
+    if (res === -1) {
         module.exports.resetCreepMemory(creep);
         return 0;
     }
@@ -35,12 +35,12 @@ module.exports.resetCreepMemory = function(creep) {
     if(creep !== undefined) {
         creep.memory.action = 'idle';
         creep.memory.queriedAction = undefined;
-        
+
         if (creep.memory.targetId !== undefined) {
             creep.memory.oldTargetId = creep.memory.targetId;
         }
         creep.memory.targetId = undefined;
-        
+
         creep.memory.pathToTarget = undefined;
     }
     return -1;

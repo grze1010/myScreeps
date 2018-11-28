@@ -41,10 +41,10 @@ module.exports.run = function (creep) {
         //     opacity: .4
         // }
         
-    if (res == OK) {
+    if (res === OK) {
         return 1;
     }
-    if (res == ERR_NOT_FOUND) {
+    if (res === ERR_NOT_FOUND) {
         return -1;
     }
 

@@ -8,7 +8,7 @@ var creep_action_manager = require('creep_action_manager');
 module.exports.run = function (creep) {
 
     let vars = creep_action_manager.startAction(creep, true, false, true);
-    if (vars == -1) {
+    if (vars === -1) {
         return -1;
     }
     let target = vars.target;
@@ -23,10 +23,10 @@ module.exports.run = function (creep) {
         }
     }
 
-    if (res == OK) {
+    if (res === OK) {
         return 1;
     }
-    if (res == ERR_NOT_IN_RANGE) {
+    if (res === ERR_NOT_IN_RANGE) {
         creep.memory.queriedAction = 'transfer';
         creep.memory.action = 'travel';
         return 0;

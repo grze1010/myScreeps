@@ -7,7 +7,7 @@
  */
 module.exports.doAction = function(tower, enemy, structure) {
 	let res = engageEnemy(tower, enemy);
-	if (res == 0) {
+	if (res === 0) {
 		repairDamagedStructures(tower, structure);
 	}
 }

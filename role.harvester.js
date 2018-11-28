@@ -13,7 +13,7 @@ module.exports.run = function (creep) {
         return -1;
     }
 
-    if(creep.transfer(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+    if(creep.transfer(target, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
         creep.moveTo(target, {visualizePathStyle: {stroke: '#FFFFFF'}});
     }
     return 1;
@@ -25,7 +25,7 @@ module.exports.findTarget = function (creep) {
         creep.memory.targetId = target.id;
         return target;
     }
-    
+
     creep.memory.targetId = undefined;
 };
 
@@ -35,15 +35,15 @@ module.exports.findClosestTarget = function (creep) {
     }
     var target = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
         filter: (structure) => {
-            return (structure.structureType == STRUCTURE_SPAWN 
-                || structure.structureType == STRUCTURE_EXTENSION) 
+            return (structure.structureType === STRUCTURE_SPAWN
+                || structure.structureType === STRUCTURE_EXTENSION)
                 && module.exports.doesNeedEnergy(structure);
         }
     });
     if(!target) {
         target = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
             filter: (structure) => {
-                return structure.structureType == STRUCTURE_TOWER 
+                return structure.structureType === STRUCTURE_TOWER
                     && module.exports.doesNeedEnergy(structure);
             }
         });
@@ -51,32 +51,21 @@ module.exports.findClosestTarget = function (creep) {
     if(!target) {
         target = creep.pos.findClosestByPath(FIND_STRUCTURES, {
             filter: (structure) => {
-                return structure.structureType == STRUCTURE_CONTAINER 
+                return structure.structureType === STRUCTURE_CONTAINER
                     && module.exports.doesNeedEnergy(structure);
             }
         });
     }
-    
+
     return target;
 };
 
 module.exports.doesNeedEnergy = function (structure) {
-    return ((structure.structureType == STRUCTURE_SPAWN 
-            || structure.structureType == STRUCTURE_EXTENSION) 
+    return ((structure.structureType === STRUCTURE_SPAWN
+            || structure.structureType === STRUCTURE_EXTENSION)
                 && structure.energy < structure.energyCapacity)
-            || (structure.structureType == STRUCTURE_CONTAINER 
+            || (structure.structureType === STRUCTURE_CONTAINER
                 && structure.store.energy < structure.storeCapacity)
-            || (structure.structureType == STRUCTURE_TOWER 
+            || (structure.structureType === STRUCTURE_TOWER
                 && structure.energy < structure.energyCapacity*9/10);
 }
-
-
-
-
-
-
-
-
-
-
-
