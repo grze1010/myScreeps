@@ -3,10 +3,13 @@
  * @param {Tower} tower [description]
  * @param {(hostile) Creep} enemy [description]
  * @param {Structure} structure [description]
- * @return {undefind} [description]
+ * @return {undefined} [description]
  */
-module.exports.doAction = function(tower, enemy, structure) {
+module.exports.doAction = function(tower, enemy, creep, structure) {
 	let res = engageEnemy(tower, enemy);
+	if (res === 0) {
+		res healCreep(tower, creep);
+	}
 	if (res === 0) {
 		repairDamagedStructures(tower, structure);
 	}
@@ -15,7 +18,7 @@ module.exports.doAction = function(tower, enemy, structure) {
 /**
  * @param {Tower} tower [description]
  * @param {(hostile) Creep} enemy [description]
- * @return {undefind} [description]
+ * @return {undefined} [description]
  */
 var engageEnemy = function (tower, enemy) {
     if(enemy !== undefined) {
@@ -27,8 +30,21 @@ var engageEnemy = function (tower, enemy) {
 
 /**
  * @param {Tower} tower [description]
+ * @param {Creep} creep [description]
+ * @return {undefined} [description]
+ */
+var healCreep = function (tower, creep) {
+    if(creep !== undefined) {
+        tower.heal(creep);
+        return 1;
+    }
+    return 0;
+}
+
+/**
+ * @param {Tower} tower [description]
  * @param {Structure} structure [description]
- * @return {undefind} [description]
+ * @return {undefined} [description]
  */
 var repairDamagedStructures = function (tower, structure) {
     if (tower.energy < tower.energyCapacity/2) {
