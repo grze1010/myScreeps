@@ -6,10 +6,9 @@ var managerTowers = require('manager.towers');
 module.exports.loop = function () {
     //
     //todo: automatic builder (extensions, containeres, storage, roads)
-    //role scout, attacker, dismantler
     //go to next room, 
     //creeps pathing (movebypath, reusepath, Room.serializePath)
-    //if fiound hostile - first get energy to tower
+    //if found hostile - first get energy to tower
     //
     
     console.log('-----------------next loop------------------');

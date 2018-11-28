@@ -34,7 +34,13 @@ module.exports.changeCreepAction = function(creep, action) {
 module.exports.resetCreepMemory = function(creep) {
     if(creep !== undefined) {
         creep.memory.action = 'idle';
+        creep.memory.queriedAction = undefined;
+        
+        if (creep.memory.targetId !== undefined) {
+            creep.memory.oldTargetId = creep.memory.targetId;
+        }
         creep.memory.targetId = undefined;
+        
         creep.memory.pathToTarget = undefined;
     }
     return -1;

@@ -18,6 +18,7 @@ module.exports.run = function (creep) {
     }
     if (res == ERR_NOT_IN_RANGE) {
 		creep.memory.targetId = creep.room.controller.id;
+		creep.memory.queriedAction = 'upgradeController';
         creep.memory.action = 'travel';
         return 0;
     }

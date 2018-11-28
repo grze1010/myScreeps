@@ -1,7 +1,9 @@
+//todo: role planner, hauler
 
 var creep_action_build = require('creep_action_build');
 var creep_action_collectDropped = require('creep_action_collectDropped');
 var creep_action_harvest = require('creep_action_harvest');
+var creep_action_idle = require('creep_action_idle');
 var creep_action_repair = require('creep_action_repair');
 var creep_action_transfer = require('creep_action_transfer');
 var creep_action_travel = require('creep_action_travel');
@@ -18,16 +20,7 @@ module.exports.doAction = function (creep) {
     }
 
     if (creep.memory.action == 'idle') {
-        //waiting for action (between actions / energy source is empty etc.)
-        if (creep.memory.idleCounter === undefined) {
-            creep.memory.idleCounter = 0;
-        } else if (creep.memory.idleCounter > 2) {
-            creep.memory.targetId = creep.memory.sourceId;
-            creep.memory.action = 'travel';
-            creep.memory.idleCounter = undefined;
-        }
-        creep.memory.idleCounter += 1;
-        return 0;
+        return creep_action_idle.run(creep);
     }
 
     if (creep.memory.action == 'travel') {

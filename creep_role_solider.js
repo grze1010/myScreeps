@@ -1,3 +1,4 @@
+//todo: role dismantler
 
 var creep_action_attack = require('creep_action_attack');
 var creep_action_scout = require('creep_action_scout');

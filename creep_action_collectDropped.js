@@ -21,6 +21,7 @@ module.exports.run = function (creep) {
 		return 0;
 	}
     if (res == ERR_NOT_IN_RANGE) {
+        creep.memory.queriedAction = 'collectDropped';
         creep.memory.action = 'travel';
         return 0;
     }

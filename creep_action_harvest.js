@@ -17,13 +17,11 @@ module.exports.run = function (creep) {
     if (res == OK) {
         return 1;
     }
-    if (res == ERR_NOT_ENOUGH_RESOURCES) {
-        return -1;
-    }
     if (res == ERR_NOT_IN_RANGE) {
+        creep.memory.queriedAction = 'harvest';
         creep.memory.action = 'travel';
         return 0;
     }
 
-    return 0;
+    return -1;
 };
