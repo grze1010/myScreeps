@@ -13,14 +13,17 @@ module.exports.doAction = function (creep) {
         //waiting for action, move to some some spot?
         return 0;
     }
-    if (creep.memory.action === 'travel') {
-        return creep_action_travel.run(creep);
+
+    switch (creep.memory.action) {
+        case 'travel':
+            return creep_action_travel.run(creep);
+        case 'attack':
+            return creep_action_attack.run(creep);
+        case 'scout':
+            return creep_action_scout.run(creep);
+        default:
+            break;
     }
-    if (creep.memory.action === 'attack') {
-        return creep_action_attack.run(creep);
-    }
-    if (creep.memory.action === 'scout') {
-        return creep_action_scout.run(creep);
-    }
+
     return -1;
 };

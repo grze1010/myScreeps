@@ -19,33 +19,28 @@ module.exports.doAction = function (creep) {
         creep.memory.idleCounter = 0;
     }
 
-    if (creep.memory.action === 'idle') {
-        return creep_action_idle.run(creep);
+    switch (creep.memory.action) {
+        case 'idle':
+            return creep_action_idle.run(creep);
+        case 'travel':
+            return creep_action_travel.run(creep);
+        case 'harvest':
+            return creep_action_harvest.run(creep);
+        case 'withdraw':
+            return creep_action_withdraw.run(creep);
+        case 'transfer':
+            return creep_action_transfer.run(creep);
+        case 'build':
+            return creep_action_build.run(creep);
+        case 'repair':
+            return creep_action_repair.run(creep);
+        case 'collectDropped':
+            return creep_action_collectDropped.run(creep);
+        case 'upgradeController':
+            return creep_action_upgradeController.run(creep);
+        default:
+            break;
     }
 
-    if (creep.memory.action === 'travel') {
-        return creep_action_travel.run(creep);
-    }
-    if (creep.memory.action === 'harvest') {
-        return creep_action_harvest.run(creep);
-    }
-    if (creep.memory.action === 'withdraw') {
-        return creep_action_withdraw.run(creep);
-    }
-    if (creep.memory.action === 'transfer') {
-        return creep_action_transfer.run(creep);
-    }
-    if (creep.memory.action === 'build') {
-        return creep_action_build.run(creep);
-    }
-    if (creep.memory.action === 'repair') {
-        return creep_action_repair.run(creep);
-    }
-    if (creep.memory.action === 'collectDropped') {
-        return creep_action_collectDropped.run(creep);
-    }
-    if (creep.memory.action === 'upgradeController') {
-        return creep_action_upgradeController.run(creep);
-    }
     return -1;
 };
